@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|c:\\users\\senyi\\source\\repos\\ahmedvtui\\ahmedav\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|solutionrelative:ahmedav\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|c:\\users\\senyi\\source\\repos\\ahmedvtui\\ahmedav\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|solutionrelative:ahmedav\\form1.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|c:\\users\\senyi\\source\\repos\\ahmedvtui\\ahmedav\\form1.designer.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}",
+      "RelativeMoniker": "D:0:0:{F2868C68-6A1D-4266-9B94-5F40B8C488BC}|AhmedAV\\AhmedAV.vbproj|solutionrelative:ahmedav\\form1.designer.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Form1.Designer.vb",
+              "DocumentMoniker": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.Designer.vb",
+              "RelativeDocumentMoniker": "AhmedAV\\Form1.Designer.vb",
+              "ToolTip": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.Designer.vb",
+              "RelativeToolTip": "AhmedAV\\Form1.Designer.vb",
+              "ViewState": "AgIAAL0AAAAAAAAAAAAAAAYAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-06-10T14:01:21.587Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.vb",
+              "DocumentMoniker": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.vb",
+              "RelativeDocumentMoniker": "AhmedAV\\Form1.vb",
+              "ToolTip": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.vb",
+              "RelativeToolTip": "AhmedAV\\Form1.vb",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAcwAIAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-06-10T13:15:05.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.vb [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "DocumentMoniker": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.vb",
+              "RelativeDocumentMoniker": "AhmedAV\\Form1.vb",
+              "ToolTip": "C:\\Users\\senyi\\source\\repos\\AhmedVTUI\\AhmedAV\\Form1.vb [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "RelativeToolTip": "AhmedAV\\Form1.vb [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-06-10T08:31:48.546Z",
+              "EditorCaption": " [\u041A\u043E\u043D\u0441\u0442\u0440\u0443\u043A\u0442\u043E\u0440]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
