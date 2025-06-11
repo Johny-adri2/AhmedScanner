@@ -1,8 +1,7 @@
-﻿Imports System.IO
-Imports System.Net
+﻿Imports System.Net
+Imports System.IO
 Imports System.Text
 Imports Newtonsoft.Json.Linq
-Imports Windows.Win32.System
 
 Module VirusTotalAPI
 
@@ -12,14 +11,17 @@ Module VirusTotalAPI
 
     Public Function AnalyzeFile(ByVal filePath As String, ByVal API_KEY As String) As String
         Dim fileID As String = UploadFile(filePath, API_KEY)
-
         If String.IsNullOrEmpty(fileID) Then
             Return "Error uploading file."
         End If
 
-        System.Threading.Thread.Sleep(0) ' adjust as needed
 
-        Return GetAnalysisReport(fileID, API_KEY)
+        Dim analysisJson As JObject = PollAnalysisStatus(fileID, API_KEY)
+        If analysisJson Is Nothing Then
+            Return "Timeout waiting for analysis to complete."
+        End If
+
+        Return ExtractAnalysisReport(analysisJson, isUrl:=False)
     End Function
 
 
@@ -52,46 +54,19 @@ Module VirusTotalAPI
     End Function
 
 
-    Public Function GetAnalysisReport(ByVal fileID As String, ByVal API_KEY As String) As String
-        Try
-            Dim webClient As New WebClient()
-            webClient.Headers.Add("x-apikey", API_KEY)
-
-            Dim analysisUrl As String = VT_API_URL & "analyses/" & fileID
-
-            Dim response As String = webClient.DownloadString(analysisUrl)
-
-            Dim jsonResponse As JObject = JObject.Parse(response)
-
-            If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("attributes") IsNot Nothing AndAlso jsonResponse("data")("attributes")("stats") IsNot Nothing Then
-                Dim stats As JObject = DirectCast(jsonResponse("data")("attributes")("stats"), JObject)
-
-                Dim report As String = stats.ToString()
-
-                Return report
-            Else
-                Console.WriteLine("Error getting analysis report: " & response)
-                Return "Error getting analysis report."
-            End If
-
-        Catch ex As Exception
-            Console.WriteLine("Error getting analysis report: " & ex.Message)
-            Return "Error getting analysis report."
-        End Try
-    End Function
-
-
     Public Function AnalyzeURL(ByVal urlToScan As String, ByVal API_KEY As String) As String
         Dim urlID As String = SubmitURL(urlToScan, API_KEY)
-
         If String.IsNullOrEmpty(urlID) Then
             Return "Error submitting URL."
         End If
 
 
-        System.Threading.Thread.Sleep(0) ' adjust as needed
+        Dim analysisJson As JObject = PollAnalysisStatus(urlID, API_KEY)
+        If analysisJson Is Nothing Then
+            Return "Timeout waiting for URL analysis to complete."
+        End If
 
-        Return GetURLAnalysisReport(urlID, API_KEY)
+        Return ExtractAnalysisReport(analysisJson, isUrl:=True)
     End Function
 
 
@@ -122,35 +97,77 @@ Module VirusTotalAPI
     End Function
 
 
-    Public Function GetURLAnalysisReport(ByVal urlID As String, ByVal API_KEY As String) As String
+    Private Function PollAnalysisStatus(ByVal analysisID As String, ByVal API_KEY As String) As JObject
+        Const maxWaitSeconds As Integer = 120
+        Const pollIntervalMs As Integer = 3000
+
+        Dim elapsedTime As Integer = 0
+
         Try
             Dim webClient As New WebClient()
             webClient.Headers.Add("x-apikey", API_KEY)
 
-            Dim analysisUrl As String = VT_API_URL & "analyses/" & urlID
+            While elapsedTime < maxWaitSeconds
+                Dim analysisUrl As String = VT_API_URL & "analyses/" & analysisID
+                Dim response As String = webClient.DownloadString(analysisUrl)
+                Dim jsonResponse As JObject = JObject.Parse(response)
 
-            Dim response As String = webClient.DownloadString(analysisUrl)
+                Dim status As String = String.Empty
 
-            Dim jsonResponse As JObject = JObject.Parse(response)
+                If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("attributes") IsNot Nothing AndAlso jsonResponse("data")("attributes")("status") IsNot Nothing Then
+                    status = jsonResponse("data")("attributes")("status").ToString()
+                End If
 
-            If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("attributes") IsNot Nothing AndAlso jsonResponse("data")("attributes")("stats") IsNot Nothing Then
-                Dim stats As JObject = DirectCast(jsonResponse("data")("attributes")("stats"), JObject)
+                If String.Equals(status, "completed", StringComparison.OrdinalIgnoreCase) Then
+                    Return jsonResponse
+                End If
 
-                Dim report As String = stats.ToString()
+
+                Dim waitInterval As Integer = pollIntervalMs
+                Do While waitInterval > 0
+                    System.Threading.Thread.Sleep(100)
+                    waitInterval -= 100
+
+                Loop
+
+                elapsedTime += pollIntervalMs / 1000
+            End While
+        Catch ex As Exception
+            Console.WriteLine("Error polling analysis status: " & ex.Message)
+        End Try
+
+        Return Nothing
+    End Function
+
+
+    Private Function ExtractAnalysisReport(ByVal analysisJson As JObject, ByVal isUrl As Boolean) As String
+        Try
+            If analysisJson("data") IsNot Nothing AndAlso analysisJson("data")("attributes") IsNot Nothing AndAlso analysisJson("data")("attributes")("stats") IsNot Nothing Then
+                Dim stats As JObject = DirectCast(analysisJson("data")("attributes")("stats"), JObject)
+
+                Dim harmless As String = stats("harmless").ToString()
+                Dim malicious As String = stats("malicious").ToString()
+                Dim suspicious As String = stats("suspicious").ToString()
+                Dim undetected As String = stats("undetected").ToString()
+                Dim timeout As String = stats("timeout").ToString()
+                Dim report As String
+                If malicious + suspicious > 0 Then
+                    report = "not good"
+                Else
+                    report = "looks fine bro"
+                End If
 
                 Return report
             Else
-                Console.WriteLine("Error getting URL analysis report: " & response)
-                Return "Error getting URL analysis report."
+                Return "Analysis data is incomplete or unavailable."
             End If
-
         Catch ex As Exception
-            Console.WriteLine("Error getting URL analysis report: " & ex.Message)
-            Return "Error getting URL analysis report."
+            Return "Error extracting analysis report: " & ex.Message
         End Try
     End Function
 
 End Module
+
 
 
 Public Class ahmed
@@ -173,12 +190,13 @@ Public Class ahmed
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Label5.Text = "Here you go"
-        Label6.Text = "..."
+        Label5.Text = "I'm thinking, 
+brother"
+        Label6.Text = ""
         If CheckBox1.Checked Then
-            Label6.Text = VirusTotalAPI.AnalyzeURL(TextBox2.Text, TextBox1.Text)
+            Label5.Text = VirusTotalAPI.AnalyzeURL(TextBox2.Text, TextBox1.Text)
         Else
-            Label6.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text)
+            Label5.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text)
         End If
 
     End Sub
