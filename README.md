@@ -6,7 +6,7 @@ TODO:
 
 () Make an Ask Ahmed option in context menu
 
-() Format the scan results
+(x) Format the scan results
 # Modifying and Building
 I used Visual Studio 2022 with Windows Forms Visual Basic preset.
 
