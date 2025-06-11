@@ -5,8 +5,6 @@ It is unstable, may not work first try, only a couple of requests a minute or fi
 TODO: 
 
 (?) Make an Ask Ahmed option in context menu
-
-(x) Format the scan results
 # Modifying and Building
 I used Visual Studio 2022 with Windows Forms Visual Basic preset.
 
