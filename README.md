@@ -4,7 +4,7 @@ It is unstable, may not work first try, only a couple of requests a minute or fi
 
 TODO: 
 
-() Make an Ask Ahmed option in context menu
+(?) Make an Ask Ahmed option in context menu
 
 (x) Format the scan results
 # Modifying and Building
