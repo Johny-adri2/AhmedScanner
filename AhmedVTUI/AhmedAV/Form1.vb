@@ -9,7 +9,7 @@ Module VirusTotalAPI
     Const VT_API_URL As String = "https://www.virustotal.com/api/v3/"
 
 
-    Public Function AnalyzeFile(ByVal filePath As String, ByVal API_KEY As String) As String
+    Public Function AnalyzeFile(ByVal filePath As String, ByVal API_KEY As String, ByVal phr As Object) As String
         Dim fileID As String = UploadFile(filePath, API_KEY)
         If String.IsNullOrEmpty(fileID) Then
             Return "Error uploading file."
@@ -21,7 +21,7 @@ Module VirusTotalAPI
             Return "Timeout waiting for analysis to complete."
         End If
 
-        Return ExtractAnalysisReport(analysisJson, isUrl:=False)
+        Return ExtractAnalysisReport(analysisJson, isUrl:=False, phr)
     End Function
 
 
@@ -54,7 +54,7 @@ Module VirusTotalAPI
     End Function
 
 
-    Public Function AnalyzeURL(ByVal urlToScan As String, ByVal API_KEY As String) As String
+    Public Function AnalyzeURL(ByVal urlToScan As String, ByVal API_KEY As String, ByVal phr As Object) As String
         Dim urlID As String = SubmitURL(urlToScan, API_KEY)
         If String.IsNullOrEmpty(urlID) Then
             Return "Error submitting URL."
@@ -66,7 +66,7 @@ Module VirusTotalAPI
             Return "Timeout waiting for URL analysis to complete."
         End If
 
-        Return ExtractAnalysisReport(analysisJson, isUrl:=True)
+        Return ExtractAnalysisReport(analysisJson, isUrl:=True, phr)
     End Function
 
 
@@ -140,7 +140,7 @@ Module VirusTotalAPI
     End Function
 
 
-    Private Function ExtractAnalysisReport(ByVal analysisJson As JObject, ByVal isUrl As Boolean) As String
+    Private Function ExtractAnalysisReport(ByVal analysisJson As JObject, ByVal isUrl As Boolean, ByVal phr As Object) As String
         Try
             If analysisJson("data") IsNot Nothing AndAlso analysisJson("data")("attributes") IsNot Nothing AndAlso analysisJson("data")("attributes")("stats") IsNot Nothing Then
                 Dim stats As JObject = DirectCast(analysisJson("data")("attributes")("stats"), JObject)
@@ -152,9 +152,18 @@ Module VirusTotalAPI
                 Dim timeout As String = stats("timeout").ToString()
                 Dim report As String
                 If malicious + suspicious > 0 Then
-                    report = "not good"
+                    If phr Then
+                        report = "haram"
+                    Else
+                        report = "not good"
+                    End If
+
                 Else
-                    report = "looks fine bro"
+                    If phr Then
+                        report = "halal"
+                    Else
+                        report = "looks fine bro"
+                    End If
                 End If
 
                 Return report
@@ -190,14 +199,54 @@ Public Class ahmed
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Label1.Visible = False
+        Label2.Visible = False
+        Label3.Visible = False
+        CheckBox1.Visible = False
+        CheckBox2.Visible = False
+        CheckBox3.Visible = False
+        TextBox1.Visible = False
+        TextBox2.Visible = False
+        Button1.Visible = False
+        Button2.Visible = False
+
         Label5.Text = "I'm thinking, 
 brother"
         Label6.Text = ""
         If CheckBox1.Checked Then
-            Label5.Text = VirusTotalAPI.AnalyzeURL(TextBox2.Text, TextBox1.Text)
+            Label5.Text = VirusTotalAPI.AnalyzeURL(TextBox2.Text, TextBox1.Text, CheckBox3.Checked)
         Else
-            Label5.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text)
+            Label5.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text, CheckBox3.Checked)
         End If
+        Button3.Visible = True
+    End Sub
 
+    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
+        If CheckBox2.Checked Then
+            Label3.Text = "made by u/myuserisdrowned In Visual Basic
+automated with VirusTotal, do not abuse"
+            Label6.Text = "i scan the files you 
+upload with virustotal"
+        Else
+            Label3.Text = "
+made by u/myuserisdrowned in Visual Basic"
+            Label6.Text = "i scan the files you upload"
+        End If
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+        Label1.Visible = True
+        Label2.Visible = True
+        Label3.Visible = True
+        CheckBox1.Visible = True
+        CheckBox2.Visible = True
+        CheckBox3.Visible = True
+        TextBox1.Visible = True
+        TextBox2.Visible = True
+        Button1.Visible = True
+        Button2.Visible = True
+        Button3.Visible = False
+        Label5.Text = "scan more if 
+you want"
     End Sub
 End Class

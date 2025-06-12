@@ -36,6 +36,9 @@ Partial Class ahmed
         PictureBox2 = New PictureBox()
         OpenFileDialog1 = New OpenFileDialog()
         CheckBox1 = New CheckBox()
+        CheckBox2 = New CheckBox()
+        CheckBox3 = New CheckBox()
+        Button3 = New Button()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
@@ -95,6 +98,7 @@ Partial Class ahmed
         Label3.AutoSize = True
         Label3.Font = New Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
         Label3.ForeColor = SystemColors.ControlDark
+        Label3.ImageAlign = ContentAlignment.BottomRight
         Label3.Location = New Point(235, 336)
         Label3.Name = "Label3"
         Label3.Size = New Size(231, 26)
@@ -116,12 +120,12 @@ Partial Class ahmed
         ' 
         Label5.AutoSize = True
         Label5.BackColor = Color.White
-        Label5.Font = New Font("Comic Sans MS", 18F, FontStyle.Bold Or FontStyle.Italic, GraphicsUnit.Point, CByte(204))
+        Label5.Font = New Font("Comic Sans MS", 18.0F, FontStyle.Bold Or FontStyle.Italic, GraphicsUnit.Point, CByte(204))
         Label5.Location = New Point(30, 26)
         Label5.Name = "Label5"
-        Label5.Size = New Size(145, 34)
+        Label5.Size = New Size(139, 34)
         Label5.TabIndex = 9
-        Label5.Text = "I'm Ahmed"
+        Label5.Text = "i'm Ahmed"
         ' 
         ' Label6
         ' 
@@ -130,9 +134,9 @@ Partial Class ahmed
         Label6.Font = New Font("Comic Sans MS", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(204))
         Label6.Location = New Point(30, 60)
         Label6.Name = "Label6"
-        Label6.Size = New Size(153, 38)
+        Label6.Size = New Size(147, 38)
         Label6.TabIndex = 10
-        Label6.Text = "I scan the files you " & vbCrLf & "upload with VirusTotal"
+        Label6.Text = "i scan the files you " & vbCrLf & "upload with virustotal"
         ' 
         ' PictureBox2
         ' 
@@ -161,11 +165,48 @@ Partial Class ahmed
         CheckBox1.Text = "Link"
         CheckBox1.UseVisualStyleBackColor = True
         ' 
+        ' CheckBox2
+        ' 
+        CheckBox2.AutoSize = True
+        CheckBox2.Checked = True
+        CheckBox2.CheckState = CheckState.Checked
+        CheckBox2.ForeColor = SystemColors.ControlDarkDark
+        CheckBox2.Location = New Point(252, 248)
+        CheckBox2.Name = "CheckBox2"
+        CheckBox2.Size = New Size(76, 19)
+        CheckBox2.TabIndex = 13
+        CheckBox2.Text = "VT notice"
+        CheckBox2.UseVisualStyleBackColor = True
+        ' 
+        ' CheckBox3
+        ' 
+        CheckBox3.AutoSize = True
+        CheckBox3.ForeColor = SystemColors.ControlDarkDark
+        CheckBox3.Location = New Point(334, 248)
+        CheckBox3.Name = "CheckBox3"
+        CheckBox3.Size = New Size(89, 19)
+        CheckBox3.TabIndex = 14
+        CheckBox3.Text = "ALT phrases"
+        CheckBox3.UseVisualStyleBackColor = True
+        ' 
+        ' Button3
+        ' 
+        Button3.Location = New Point(215, 301)
+        Button3.Name = "Button3"
+        Button3.Size = New Size(52, 22)
+        Button3.TabIndex = 15
+        Button3.Text = "OK"
+        Button3.UseVisualStyleBackColor = True
+        Button3.Visible = False
+        ' 
         ' ahmed
         ' 
-        AutoScaleDimensions = New SizeF(7F, 15F)
+        AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(478, 374)
+        Controls.Add(Button3)
+        Controls.Add(CheckBox3)
+        Controls.Add(CheckBox2)
         Controls.Add(CheckBox1)
         Controls.Add(PictureBox2)
         Controls.Add(Label6)
@@ -203,5 +244,8 @@ Partial Class ahmed
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents CheckBox2 As CheckBox
+    Friend WithEvents CheckBox3 As CheckBox
+    Friend WithEvents Button3 As Button
 
 End Class
