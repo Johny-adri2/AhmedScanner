@@ -1,5 +1,5 @@
 # AhmedScanner
-An unfinished VirusTotal API GUI, featuring Ahmed.
+A VirusTotal API GUI, featuring Ahmed.
 
 It may not work first try, only a couple of requests a minute or file size limits.
 
