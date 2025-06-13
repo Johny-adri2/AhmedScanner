@@ -31,55 +31,63 @@ Partial Class ahmed
         Label2 = New Label()
         Label3 = New Label()
         PictureBox1 = New PictureBox()
-        Label5 = New Label()
         Label6 = New Label()
         PictureBox2 = New PictureBox()
         OpenFileDialog1 = New OpenFileDialog()
-        CheckBox1 = New CheckBox()
-        CheckBox2 = New CheckBox()
         CheckBox3 = New CheckBox()
         Button3 = New Button()
+        Label5 = New Label()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
         ' Button1
         ' 
-        Button1.Location = New Point(12, 339)
+        Button1.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Button1.Location = New Point(13, 222)
+        Button1.Margin = New Padding(4, 2, 4, 2)
         Button1.Name = "Button1"
-        Button1.Size = New Size(75, 23)
+        Button1.Size = New Size(38, 19)
         Button1.TabIndex = 0
         Button1.Text = "Scan"
         Button1.UseVisualStyleBackColor = True
         ' 
         ' TextBox1
         ' 
-        TextBox1.Location = New Point(12, 310)
+        TextBox1.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        TextBox1.Location = New Point(13, 200)
+        TextBox1.Margin = New Padding(4, 2, 4, 2)
         TextBox1.Name = "TextBox1"
-        TextBox1.Size = New Size(181, 23)
+        TextBox1.Size = New Size(100, 18)
         TextBox1.TabIndex = 1
         ' 
         ' Label1
         ' 
         Label1.AutoSize = True
-        Label1.Location = New Point(12, 292)
+        Label1.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Label1.Location = New Point(13, 187)
+        Label1.Margin = New Padding(4, 0, 4, 0)
         Label1.Name = "Label1"
-        Label1.Size = New Size(47, 15)
+        Label1.Size = New Size(43, 11)
         Label1.TabIndex = 2
         Label1.Text = "API Key"
         ' 
         ' TextBox2
         ' 
-        TextBox2.Location = New Point(12, 266)
+        TextBox2.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        TextBox2.Location = New Point(13, 167)
+        TextBox2.Margin = New Padding(4, 2, 4, 2)
         TextBox2.Name = "TextBox2"
-        TextBox2.Size = New Size(100, 23)
+        TextBox2.Size = New Size(100, 18)
         TextBox2.TabIndex = 3
         ' 
         ' Button2
         ' 
-        Button2.Location = New Point(118, 266)
+        Button2.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Button2.Location = New Point(116, 168)
+        Button2.Margin = New Padding(4, 2, 4, 2)
         Button2.Name = "Button2"
-        Button2.Size = New Size(75, 23)
+        Button2.Size = New Size(49, 18)
         Button2.TabIndex = 4
         Button2.Text = "Browse"
         Button2.UseVisualStyleBackColor = True
@@ -87,64 +95,60 @@ Partial Class ahmed
         ' Label2
         ' 
         Label2.AutoSize = True
-        Label2.Location = New Point(12, 248)
+        Label2.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Label2.Location = New Point(13, 154)
+        Label2.Margin = New Padding(4, 0, 4, 0)
         Label2.Name = "Label2"
-        Label2.Size = New Size(46, 15)
+        Label2.Size = New Size(38, 11)
         Label2.TabIndex = 5
         Label2.Text = "Sample"
         ' 
         ' Label3
         ' 
         Label3.AutoSize = True
-        Label3.Font = New Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Label3.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
         Label3.ForeColor = SystemColors.ControlDark
         Label3.ImageAlign = ContentAlignment.BottomRight
-        Label3.Location = New Point(235, 336)
+        Label3.Location = New Point(168, 219)
+        Label3.Margin = New Padding(4, 0, 4, 0)
         Label3.Name = "Label3"
-        Label3.Size = New Size(231, 26)
+        Label3.Size = New Size(140, 22)
         Label3.TabIndex = 6
-        Label3.Text = "made by u/myuserisdrowned in Visual Basic" & vbCrLf & "automated with VirusTotal, do not abuse"
+        Label3.Text = "made by u/myuserisdrowned " & vbCrLf & "in Visual Basic" & vbCrLf
         Label3.TextAlign = ContentAlignment.BottomRight
         ' 
         ' PictureBox1
         ' 
         PictureBox1.BackColor = SystemColors.Control
         PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), Image)
-        PictureBox1.Location = New Point(12, 7)
+        PictureBox1.Location = New Point(13, 11)
+        PictureBox1.Margin = New Padding(4, 2, 4, 2)
         PictureBox1.Name = "PictureBox1"
-        PictureBox1.Size = New Size(245, 277)
+        PictureBox1.Size = New Size(160, 137)
+        PictureBox1.SizeMode = PictureBoxSizeMode.StretchImage
         PictureBox1.TabIndex = 8
         PictureBox1.TabStop = False
-        ' 
-        ' Label5
-        ' 
-        Label5.AutoSize = True
-        Label5.BackColor = Color.White
-        Label5.Font = New Font("Comic Sans MS", 18.0F, FontStyle.Bold Or FontStyle.Italic, GraphicsUnit.Point, CByte(204))
-        Label5.Location = New Point(30, 26)
-        Label5.Name = "Label5"
-        Label5.Size = New Size(139, 34)
-        Label5.TabIndex = 9
-        Label5.Text = "i'm Ahmed"
         ' 
         ' Label6
         ' 
         Label6.AutoSize = True
-        Label6.BackColor = Color.White
-        Label6.Font = New Font("Comic Sans MS", 9.75F, FontStyle.Bold, GraphicsUnit.Point, CByte(204))
-        Label6.Location = New Point(30, 60)
+        Label6.BackColor = Color.LemonChiffon
+        Label6.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(204))
+        Label6.Location = New Point(28, 47)
+        Label6.Margin = New Padding(4, 0, 4, 0)
         Label6.Name = "Label6"
-        Label6.Size = New Size(147, 38)
+        Label6.Size = New Size(103, 24)
         Label6.TabIndex = 10
-        Label6.Text = "i scan the files you " & vbCrLf & "upload with virustotal"
+        Label6.Text = "i scan the files " & vbCrLf & "you upload"
         ' 
         ' PictureBox2
         ' 
         PictureBox2.BorderStyle = BorderStyle.Fixed3D
         PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), Image)
-        PictureBox2.Location = New Point(252, 7)
+        PictureBox2.Location = New Point(181, 11)
+        PictureBox2.Margin = New Padding(4, 2, 4, 2)
         PictureBox2.Name = "PictureBox2"
-        PictureBox2.Size = New Size(214, 232)
+        PictureBox2.Size = New Size(128, 138)
         PictureBox2.SizeMode = PictureBoxSizeMode.StretchImage
         PictureBox2.TabIndex = 11
         PictureBox2.TabStop = False
@@ -153,64 +157,53 @@ Partial Class ahmed
         ' 
         OpenFileDialog1.FileName = "OpenFileDialog1"
         ' 
-        ' CheckBox1
-        ' 
-        CheckBox1.AutoSize = True
-        CheckBox1.ForeColor = SystemColors.ControlDarkDark
-        CheckBox1.Location = New Point(118, 248)
-        CheckBox1.Margin = New Padding(3, 2, 3, 2)
-        CheckBox1.Name = "CheckBox1"
-        CheckBox1.Size = New Size(48, 19)
-        CheckBox1.TabIndex = 12
-        CheckBox1.Text = "Link"
-        CheckBox1.UseVisualStyleBackColor = True
-        ' 
-        ' CheckBox2
-        ' 
-        CheckBox2.AutoSize = True
-        CheckBox2.Checked = True
-        CheckBox2.CheckState = CheckState.Checked
-        CheckBox2.ForeColor = SystemColors.ControlDarkDark
-        CheckBox2.Location = New Point(252, 248)
-        CheckBox2.Name = "CheckBox2"
-        CheckBox2.Size = New Size(76, 19)
-        CheckBox2.TabIndex = 13
-        CheckBox2.Text = "VT notice"
-        CheckBox2.UseVisualStyleBackColor = True
-        ' 
         ' CheckBox3
         ' 
         CheckBox3.AutoSize = True
+        CheckBox3.Font = New Font("MS UI Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
         CheckBox3.ForeColor = SystemColors.ControlDarkDark
-        CheckBox3.Location = New Point(334, 248)
+        CheckBox3.Location = New Point(180, 153)
+        CheckBox3.Margin = New Padding(4, 2, 4, 2)
         CheckBox3.Name = "CheckBox3"
-        CheckBox3.Size = New Size(89, 19)
+        CheckBox3.Size = New Size(82, 15)
         CheckBox3.TabIndex = 14
         CheckBox3.Text = "ALT phrases"
         CheckBox3.UseVisualStyleBackColor = True
         ' 
         ' Button3
         ' 
-        Button3.Location = New Point(215, 301)
+        Button3.Font = New Font("MS UI Gothic", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
+        Button3.Location = New Point(131, 192)
+        Button3.Margin = New Padding(4, 2, 4, 2)
         Button3.Name = "Button3"
-        Button3.Size = New Size(52, 22)
+        Button3.Size = New Size(66, 22)
         Button3.TabIndex = 15
-        Button3.Text = "OK"
+        Button3.Text = "Thanks"
         Button3.UseVisualStyleBackColor = True
         Button3.Visible = False
+        ' 
+        ' Label5
+        ' 
+        Label5.AutoSize = True
+        Label5.BackColor = Color.LemonChiffon
+        Label5.Font = New Font("MS UI Gothic", 12.0F, FontStyle.Bold, GraphicsUnit.Point, CByte(204))
+        Label5.Location = New Point(28, 27)
+        Label5.Margin = New Padding(4, 0, 4, 0)
+        Label5.Name = "Label5"
+        Label5.Size = New Size(83, 16)
+        Label5.TabIndex = 16
+        Label5.Text = "i'm ahmed"
         ' 
         ' ahmed
         ' 
         AutoScaleDimensions = New SizeF(7.0F, 15.0F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(478, 374)
+        ClientSize = New Size(321, 253)
+        Controls.Add(Label5)
         Controls.Add(Button3)
         Controls.Add(CheckBox3)
-        Controls.Add(CheckBox2)
-        Controls.Add(CheckBox1)
         Controls.Add(PictureBox2)
         Controls.Add(Label6)
-        Controls.Add(Label5)
         Controls.Add(Label3)
         Controls.Add(Label2)
         Controls.Add(Button2)
@@ -219,12 +212,14 @@ Partial Class ahmed
         Controls.Add(TextBox1)
         Controls.Add(Button1)
         Controls.Add(PictureBox1)
+        Font = New Font("Segoe UI", 9.0F, FontStyle.Regular, GraphicsUnit.Point, CByte(204))
         FormBorderStyle = FormBorderStyle.FixedDialog
         Icon = CType(resources.GetObject("$this.Icon"), Icon)
+        Margin = New Padding(4, 2, 4, 2)
         MaximizeBox = False
         Name = "ahmed"
         StartPosition = FormStartPosition.CenterScreen
-        Text = "AhmedScanner - Allah will help you!"
+        Text = "Ahmed - Allah will help you!"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)
@@ -239,13 +234,11 @@ Partial Class ahmed
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents Label5 As Label
     Friend WithEvents Label6 As Label
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
-    Friend WithEvents CheckBox1 As CheckBox
-    Friend WithEvents CheckBox2 As CheckBox
     Friend WithEvents CheckBox3 As CheckBox
     Friend WithEvents Button3 As Button
+    Friend WithEvents Label5 As Label
 
 End Class
