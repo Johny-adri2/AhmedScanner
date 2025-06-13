@@ -1,43 +1,105 @@
 ﻿Imports System.Net
 Imports System.IO
 Imports System.Text
+Imports System.Security.Cryptography
 Imports Newtonsoft.Json.Linq
 
 Module VirusTotalAPI
 
-
     Const VT_API_URL As String = "https://www.virustotal.com/api/v3/"
 
-
-    Public Function AnalyzeFile(ByVal filePath As String, ByVal API_KEY As String, ByVal phr As Object) As String
-        Dim fileID As String = UploadFile(filePath, API_KEY)
-        If String.IsNullOrEmpty(fileID) Then
-            Return "Error uploading file."
-        End If
-
-
-        Dim analysisJson As JObject = PollAnalysisStatus(fileID, API_KEY)
-        If analysisJson Is Nothing Then
-            Return "Timeout waiting for analysis to complete."
-        End If
-
-        Return ExtractAnalysisReport(analysisJson, isUrl:=False, phr)
+    Public Function ComputeFileSHA256(filePath As String) As String
+        Using sha256 As SHA256 = SHA256.Create()
+            Using fileStream As FileStream = File.OpenRead(filePath)
+                Dim hashBytes As Byte() = sha256.ComputeHash(fileStream)
+                Return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant()
+            End Using
+        End Using
     End Function
 
+    Public Function GetFileReportByHash(fileHash As String, API_KEY As String) As JObject
+        Dim webClient As New WebClient()
+        webClient.Headers.Add("x-apikey", API_KEY)
+        Dim requestUrl As String = VT_API_URL & "files/" & fileHash
+        Try
+            Dim response As String = webClient.DownloadString(requestUrl)
+            Dim jsonResponse As JObject = JObject.Parse(response)
+            Return jsonResponse
+        Catch ex As WebException
+            Dim resp As HttpWebResponse = TryCast(ex.Response, HttpWebResponse)
+            If resp IsNot Nothing AndAlso resp.StatusCode = HttpStatusCode.NotFound Then
+                Return Nothing
+            Else
+                Throw
+            End If
+        End Try
+    End Function
 
-    Private Function UploadFile(ByVal filePath As String, ByVal API_KEY As String) As String
+    Public Function AnalyzeFile(filePath As String, API_KEY As String, phr As String) As String
+        Dim fileHash As String = ComputeFileSHA256(filePath)
+
+        Try
+            Dim reportJson As JObject = GetFileReportByHash(fileHash, API_KEY)
+            If reportJson IsNot Nothing Then
+                Return ExtractFileAnalysisReport(reportJson, phr)
+            Else
+                Dim analysisId As String = UploadFile(filePath, API_KEY)
+                If String.IsNullOrEmpty(analysisId) Then
+                    Return "Error uploading file."
+                End If
+
+                Dim analysisJson As JObject = PollAnalysisStatus(analysisId, API_KEY)
+                If analysisJson Is Nothing Then
+                    Return "Timeout waiting for analysis to complete."
+                End If
+
+                Return ExtractAnalysisReport(analysisJson, phr)
+            End If
+        Catch ex As Exception
+            Return "Error during analysis: " & ex.Message
+        End Try
+    End Function
+
+    Private Function ExtractFileAnalysisReport(reportJson As JObject, phr As String) As String
+        Try
+            Dim attributes As JObject = CType(reportJson("data")("attributes"), JObject)
+            Dim stats As JObject = CType(attributes("last_analysis_stats"), JObject)
+            Dim harmless As Integer = stats("harmless")
+            Dim malicious As Integer = stats("malicious")
+            Dim suspicious As Integer = stats("suspicious")
+            Dim undetected As Integer = stats("undetected")
+            Dim timeout As Integer = stats("timeout")
+
+            Dim report As String
+            If malicious + suspicious > 0 Then
+                If phr Then
+                    report = "haram"
+                Else
+                    report = "not good"
+                End If
+
+            Else
+                If phr Then
+                    report = "halal"
+                Else
+                    report = "looks fine bro"
+                End If
+            End If
+
+            Return report
+        Catch ex As Exception
+            Return "Error extracting file analysis report: " & ex.Message
+        End Try
+    End Function
+
+    Private Function UploadFile(ByVal filePath As String, API_KEY As String) As String
         Try
             Dim webClient As New WebClient()
             webClient.Headers.Add("x-apikey", API_KEY)
 
             Dim uploadUrl As String = VT_API_URL & "files"
-
-
             Dim responseBytes As Byte() = webClient.UploadFile(uploadUrl, "POST", filePath)
-
-
-            Dim response As String = System.Text.Encoding.UTF8.GetString(responseBytes)
-
+            Dim response As String = Encoding.UTF8.GetString(responseBytes)
             Dim jsonResponse As JObject = JObject.Parse(response)
 
             If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("id") IsNot Nothing Then
@@ -53,51 +115,7 @@ Module VirusTotalAPI
         End Try
     End Function
 
-
-    Public Function AnalyzeURL(ByVal urlToScan As String, ByVal API_KEY As String, ByVal phr As Object) As String
-        Dim urlID As String = SubmitURL(urlToScan, API_KEY)
-        If String.IsNullOrEmpty(urlID) Then
-            Return "Error submitting URL."
-        End If
-
-
-        Dim analysisJson As JObject = PollAnalysisStatus(urlID, API_KEY)
-        If analysisJson Is Nothing Then
-            Return "Timeout waiting for URL analysis to complete."
-        End If
-
-        Return ExtractAnalysisReport(analysisJson, isUrl:=True, phr)
-    End Function
-
-
-    Private Function SubmitURL(ByVal urlToScan As String, ByVal API_KEY As String) As String
-        Try
-            Dim webClient As New WebClient()
-            webClient.Headers.Add("x-apikey", API_KEY)
-            webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded")
-
-            Dim submitUr As String = VT_API_URL & "urls"
-            Dim postData As String = "url=" & Uri.EscapeDataString(urlToScan)
-
-            Dim response As String = webClient.UploadString(submitUr, "POST", postData)
-
-            Dim jsonResponse As JObject = JObject.Parse(response)
-
-            If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("id") IsNot Nothing Then
-                Return jsonResponse("data")("id").ToString()
-            Else
-                Console.WriteLine("Error submitting URL: " & response)
-                Return String.Empty
-            End If
-
-        Catch ex As Exception
-            Console.WriteLine("Error submitting URL: " & ex.Message)
-            Return String.Empty
-        End Try
-    End Function
-
-
-    Private Function PollAnalysisStatus(ByVal analysisID As String, ByVal API_KEY As String) As JObject
+    Private Function PollAnalysisStatus(ByVal analysisID As String, API_KEY As String) As JObject
         Const maxWaitSeconds As Integer = 120
         Const pollIntervalMs As Integer = 3000
 
@@ -113,8 +131,9 @@ Module VirusTotalAPI
                 Dim jsonResponse As JObject = JObject.Parse(response)
 
                 Dim status As String = String.Empty
-
-                If jsonResponse("data") IsNot Nothing AndAlso jsonResponse("data")("attributes") IsNot Nothing AndAlso jsonResponse("data")("attributes")("status") IsNot Nothing Then
+                If jsonResponse("data") IsNot Nothing AndAlso
+                   jsonResponse("data")("attributes") IsNot Nothing AndAlso
+                   jsonResponse("data")("attributes")("status") IsNot Nothing Then
                     status = jsonResponse("data")("attributes")("status").ToString()
                 End If
 
@@ -122,15 +141,13 @@ Module VirusTotalAPI
                     Return jsonResponse
                 End If
 
-
                 Dim waitInterval As Integer = pollIntervalMs
                 Do While waitInterval > 0
                     System.Threading.Thread.Sleep(100)
                     waitInterval -= 100
-
                 Loop
 
-                elapsedTime += pollIntervalMs / 1000
+                elapsedTime += pollIntervalMs \ 1000
             End While
         Catch ex As Exception
             Console.WriteLine("Error polling analysis status: " & ex.Message)
@@ -139,17 +156,20 @@ Module VirusTotalAPI
         Return Nothing
     End Function
 
-
-    Private Function ExtractAnalysisReport(ByVal analysisJson As JObject, ByVal isUrl As Boolean, ByVal phr As Object) As String
+    Private Function ExtractAnalysisReport(ByVal analysisJson As JObject, phr As String) As String
         Try
-            If analysisJson("data") IsNot Nothing AndAlso analysisJson("data")("attributes") IsNot Nothing AndAlso analysisJson("data")("attributes")("stats") IsNot Nothing Then
-                Dim stats As JObject = DirectCast(analysisJson("data")("attributes")("stats"), JObject)
+            If analysisJson("data") IsNot Nothing AndAlso
+               analysisJson("data")("attributes") IsNot Nothing AndAlso
+               analysisJson("data")("attributes")("stats") IsNot Nothing Then
 
-                Dim harmless As String = stats("harmless").ToString()
-                Dim malicious As String = stats("malicious").ToString()
-                Dim suspicious As String = stats("suspicious").ToString()
-                Dim undetected As String = stats("undetected").ToString()
-                Dim timeout As String = stats("timeout").ToString()
+                Dim stats As JObject = CType(analysisJson("data")("attributes")("stats"), JObject)
+
+                Dim harmless As Integer = stats("harmless")
+                Dim malicious As Integer = stats("malicious")
+                Dim suspicious As Integer = stats("suspicious")
+                Dim undetected As Integer = stats("undetected")
+                Dim timeout As Integer = stats("timeout")
+
                 Dim report As String
                 If malicious + suspicious > 0 Then
                     If phr Then
@@ -179,7 +199,10 @@ End Module
 
 
 
-Public Class ahmed
+
+
+
+Public Class Ahmed
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         Dim openFileDialog As New OpenFileDialog()
 
@@ -202,44 +225,25 @@ Public Class ahmed
         Label1.Visible = False
         Label2.Visible = False
         Label3.Visible = False
-        CheckBox1.Visible = False
-        CheckBox2.Visible = False
         CheckBox3.Visible = False
         TextBox1.Visible = False
         TextBox2.Visible = False
         Button1.Visible = False
         Button2.Visible = False
 
-        Label5.Text = "I'm thinking, 
-brother"
-        Label6.Text = ""
-        If CheckBox1.Checked Then
-            Label5.Text = VirusTotalAPI.AnalyzeURL(TextBox2.Text, TextBox1.Text, CheckBox3.Checked)
-        Else
-            Label5.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text, CheckBox3.Checked)
-        End If
+        Label5.Text = "let me think 
+bro"
+        Label6.Visible = False
+        Label5.Text = VirusTotalAPI.AnalyzeFile(TextBox2.Text, TextBox1.Text, CheckBox3.Checked)
         Button3.Visible = True
     End Sub
 
-    Private Sub CheckBox2_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox2.CheckedChanged
-        If CheckBox2.Checked Then
-            Label3.Text = "made by u/myuserisdrowned In Visual Basic
-automated with VirusTotal, do not abuse"
-            Label6.Text = "i scan the files you 
-upload with virustotal"
-        Else
-            Label3.Text = "
-made by u/myuserisdrowned in Visual Basic"
-            Label6.Text = "i scan the files you upload"
-        End If
-    End Sub
+
 
     Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
         Label1.Visible = True
         Label2.Visible = True
         Label3.Visible = True
-        CheckBox1.Visible = True
-        CheckBox2.Visible = True
         CheckBox3.Visible = True
         TextBox1.Visible = True
         TextBox2.Visible = True
